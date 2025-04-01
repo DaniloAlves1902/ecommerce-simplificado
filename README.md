@@ -20,7 +20,7 @@ Bem-vindo ao **E-commerce Simplificado**! Este projeto foi desenvolvido para ser
 
 - **Frontend**: React
 - **Backend**: Spring Boot
-- **Banco de Dados**: H2 (ou outro banco configurado)
+- **Banco de Dados**: H2 para testes e posteriormente MySQL
 - **Documentação da API**: Swagger
 
 ## 📦 Instalação e Execução
