@@ -1,11 +1,12 @@
 package com.danilo.sellora_commerce.model;
 
 import java.time.LocalDateTime;
-//import java.util.List;
+import java.util.List;
 
 import com.danilo.sellora_commerce.model.enums.UserType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -14,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +27,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
 /**
  * Representa um usuário do sistema de e-commerce.
  */
@@ -34,9 +37,9 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "password") 
+@ToString(exclude = "password")
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "ID único do usuário", example = "1")
@@ -75,7 +78,7 @@ public class User {
     @Pattern(regexp = "\\d{11}|\\d{14}", message = "Document must be 11 (CPF) or 14 (CNPJ) digits")
     @Column(unique = true)
     @Schema(description = "CPF ou CNPJ do usuário (apenas números)", example = "12345678909")
-    private String document; 
+    private String document;
 
     @Embedded
     @Schema(description = "Endereço do usuário")
@@ -83,6 +86,10 @@ public class User {
 
     @Schema(description = "Indica se o usuário está ativo ou inativo", example = "true")
     private Boolean status = true;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Schema(description = "Lista de pedidos do usuário")
+    private List<Order> orders;
 
     @Schema(description = "Data e hora de criação do usuário", example = "2025-03-30T14:30:00")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -96,4 +103,5 @@ public class User {
     public void setDocument(String document) {
         this.document = document != null ? document.replaceAll("\\D", "") : null;
     }
+
 }
