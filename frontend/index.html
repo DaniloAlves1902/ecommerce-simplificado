@@ -1,598 +1,145 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Cadastro de Usuários</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --secondary: #3f37c9;
-            --success: #4cc9f0;
-            --danger: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f5f7ff;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 30px 0;
-            border-radius: 0 0 var(--border-radius) var(--border-radius);
-            margin-bottom: 30px;
-            text-align: center;
-            box-shadow: var(--box-shadow);
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 25px;
-            margin-bottom: 30px;
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-        }
-
-        h2 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eaeaea;
-            font-size: 1.5rem;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--gray);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25);
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .btn-block {
-            width: 100%;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-            margin-top: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eaeaea;
-        }
-
-        th {
-            background-color: var(--primary);
-            color: white;
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f1f4ff;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--gray);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ddd;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background-color: rgba(76, 201, 240, 0.15);
-            color: var(--success);
-        }
-
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            visibility: hidden;
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .loading.active {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(67, 97, 238, 0.1);
-            border-left-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: var(--border-radius);
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-            transform: translateX(120%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast-success {
-            background-color: #10b981;
-        }
-
-        .toast-error {
-            background-color: var(--danger);
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            header h1 {
-                font-size: 2rem;
-            }
-        }
-
-        /* Animações */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card, .table-responsive {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        /* Validação de formulários */
-        .form-control.is-invalid {
-            border-color: var(--danger);
-        }
-
-        .invalid-feedback {
-            color: var(--danger);
-            font-size: 0.875rem;
-            margin-top: 5px;
-        }
-    </style>
+    <title>Sellora Commerce - Gerenciamento de Usuários</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/frontend/assets/css/styles.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Cabeçalho -->
-    <header>
-        <div class="container">
-            <h1><i class="fas fa-users"></i> Sistema de Gestão de Usuários</h1>
-            <p>Gerencie usuários de forma simples e eficiente</p>
-        </div>
-    </header>
+    <div class="container mt-4">
+        <header class="mb-4">
+            <h1 class="text-center">Sellora Commerce - Gerenciamento de Usuários</h1>
+        </header>
 
-    <div class="container">
-        <!-- Formulário de Cadastro -->
-        <div class="card">
-            <h2><i class="fas fa-user-plus"></i> Novo Usuário</h2>
-            <form id="userForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="fullName">Nome completo</label>
-                        <input type="text" id="fullName" class="form-control" placeholder="Digite o nome completo" required>
-                        <div class="invalid-feedback" id="fullName-feedback"></div>
+        <div id="alerts" class="mb-3"></div>
+
+        <!-- Formulário de Busca -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Buscar Usuário</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <select id="searchType" class="form-select">
+                            <option value="id">ID</option>
+                            <option value="username">Username</option>
+                            <option value="email">Email</option>
+                            <option value="document">Documento (CPF/CNPJ)</option>
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label for="username">Nome de usuário</label>
-                        <input type="text" id="username" class="form-control" placeholder="Digite o nome de usuário" required>
-                        <div class="invalid-feedback" id="username-feedback"></div>
+                    <div class="col-md-6">
+                        <input type="text" id="searchValue" class="form-control" placeholder="Digite o valor para busca">
                     </div>
-                    <div class="form-group">
-                        <label for="email">E-mail</label>
-                        <input type="email" id="email" class="form-control" placeholder="exemplo@email.com" required>
-                        <div class="invalid-feedback" id="email-feedback"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Senha</label>
-                        <input type="password" id="password" class="form-control" placeholder="Digite uma senha segura" required>
-                        <div class="invalid-feedback" id="password-feedback"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Telefone</label>
-                        <input type="text" id="phone" class="form-control" placeholder="(00) 00000-0000" required>
-                        <div class="invalid-feedback" id="phone-feedback"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="document">CPF/CNPJ</label>
-                        <input type="text" id="document" class="form-control" placeholder="000.000.000-00" required>
-                        <div class="invalid-feedback" id="document-feedback"></div>
+                    <div class="col-md-2">
+                        <button id="searchButton" class="btn btn-primary w-100">Buscar</button>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Cadastrar Usuário
-                </button>
-            </form>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <button id="listAllButton" class="btn btn-outline-secondary">Listar Todos</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Tabela de Usuários -->
-        <div class="card">
-            <h2><i class="fas fa-list"></i> Usuários Cadastrados</h2>
-            <div id="table-container" class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Usuário</th>
-                            <th>Email</th>
-                            <th>Telefone</th>
-                            <th>Documento</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="userTableBody">
-                        <!-- Os usuários cadastrados aparecerão aqui -->
-                    </tbody>
-                </table>
-                <div id="empty-state" class="empty-state">
-                    <i class="fas fa-users-slash"></i>
-                    <p>Nenhum usuário cadastrado no momento.</p>
+        <div class="row">
+            <!-- Tabela de Usuários -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Lista de Usuários</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="loadingUsers" class="text-center d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nome</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Documento</th>
+                                        <th>Tipo</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userTableBody">
+                                    <!-- Os usuários serão carregados dinamicamente aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="noUsers" class="alert alert-info d-none">
+                            Nenhum usuário encontrado.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário de Usuário -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 id="formTitle" class="mb-0">Adicionar Usuário</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="userForm">
+                            <input type="hidden" id="userId">
+                            
+                            <div class="mb-3">
+                                <label for="fullName" class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" id="fullName" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Telefone</label>
+                                <input type="tel" class="form-control" id="phone">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="document" class="form-label">Documento (CPF/CNPJ)</label>
+                                <input type="text" class="form-control" id="document" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="userType" class="form-label">Tipo de Usuário</label>
+                                <select class="form-select" id="userType" required>
+                                    <option value="CUSTOMER">Cliente</option>
+                                    <option value="SELLER">Vendedor</option>
+                                    <option value="ADMIN">Administrador</option>
+                                </select>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success" id="saveButton">Salvar</button>
+                                <button type="button" class="btn btn-secondary" id="cancelButton">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Sistema de Gestão de Usuários | Desenvolvido com <i class="fas fa-heart" style="color: #f72585;"></i></p>
-        </div>
-    </footer>
-
-    <!-- Loading Indicator -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-    </div>
-
-    <!-- Toast Messages -->
-    <div class="toast" id="toast"></div>
-
-    <script>
-        const API_URL = "http://localhost:8080/users";
-        
-        // Mascaras para os campos
-        document.getElementById("phone").addEventListener("input", function(e) {
-            let value = e.target.value.replace(/\D/g, "");
-            if (value.length > 11) value = value.substring(0, 11);
-            
-            if (value.length > 2) {
-                value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
-            }
-            if (value.length > 10) {
-                value = `${value.substring(0, 10)}-${value.substring(10)}`;
-            }
-            e.target.value = value;
-        });
-
-        document.getElementById("document").addEventListener("input", function(e) {
-            let value = e.target.value.replace(/\D/g, "");
-            if (value.length > 11) value = value.substring(0, 11);
-            
-            if (value.length > 3) {
-                value = `${value.substring(0, 3)}.${value.substring(3)}`;
-            }
-            if (value.length > 7) {
-                value = `${value.substring(0, 7)}.${value.substring(7)}`;
-            }
-            if (value.length > 11) {
-                value = `${value.substring(0, 11)}-${value.substring(11)}`;
-            }
-            e.target.value = value;
-        });
-
-        // Validação de formulário
-        function validateForm() {
-            let isValid = true;
-            const fields = ["fullName", "username", "email", "password", "phone", "document"];
-            
-            fields.forEach(field => {
-                const input = document.getElementById(field);
-                const feedback = document.getElementById(`${field}-feedback`);
-                
-                if (!input.value.trim()) {
-                    input.classList.add("is-invalid");
-                    feedback.textContent = "Este campo é obrigatório.";
-                    isValid = false;
-                } else {
-                    input.classList.remove("is-invalid");
-                    feedback.textContent = "";
-                }
-            });
-            
-            const email = document.getElementById("email");
-            const emailFeedback = document.getElementById("email-feedback");
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            
-            if (email.value && !emailRegex.test(email.value)) {
-                email.classList.add("is-invalid");
-                emailFeedback.textContent = "Por favor, insira um e-mail válido.";
-                isValid = false;
-            }
-            
-            return isValid;
-        }
-
-        // Toast notification
-        function showToast(message, type = "success") {
-            const toast = document.getElementById("toast");
-            toast.textContent = message;
-            toast.className = `toast toast-${type} show`;
-            
-            toast.innerHTML = type === "success" 
-                ? `<i class="fas fa-check-circle"></i> ${message}`
-                : `<i class="fas fa-exclamation-circle"></i> ${message}`;
-            
-            setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
-        }
-
-        // Loading indicator
-        function showLoading() {
-            document.getElementById("loading").classList.add("active");
-        }
-        
-        function hideLoading() {
-            document.getElementById("loading").classList.remove("active");
-        }
-
-        // Form submission
-        document.getElementById("userForm").addEventListener("submit", async function(event) {
-            event.preventDefault();
-            
-            if (!validateForm()) return;
-            
-            showLoading();
-            
-            const user = {
-                fullName: document.getElementById("fullName").value,
-                username: document.getElementById("username").value,
-                email: document.getElementById("email").value,
-                password: document.getElementById("password").value,
-                phone: document.getElementById("phone").value.replace(/\D/g, ""),
-                userType: "CUSTOMER",
-                document: document.getElementById("document").value.replace(/\D/g, ""),
-                status: true
-            };
-            
-            try {
-                const response = await fetch(API_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(user)
-                });
-                
-                if (response.ok) {
-                    showToast("Usuário cadastrado com sucesso!");
-                    document.getElementById("userForm").reset();
-                    carregarUsuarios();
-                } else {
-                    const error = await response.json();
-                    showToast(`Erro ao cadastrar usuário: ${error.message || "Erro desconhecido"}`, "error");
-                }
-            } catch (error) {
-                showToast("Erro ao conectar ao servidor", "error");
-                console.error(error);
-            } finally {
-                hideLoading();
-            }
-        });
-
-        // Load users
-        async function carregarUsuarios() {
-            showLoading();
-            
-            try {
-                const response = await fetch(API_URL);
-                
-                if (!response.ok) {
-                    throw new Error("Falha ao carregar usuários");
-                }
-                
-                const users = await response.json();
-                const tableBody = document.getElementById("userTableBody");
-                const emptyState = document.getElementById("empty-state");
-                
-                tableBody.innerHTML = "";
-                
-                if (users.length === 0) {
-                    emptyState.style.display = "block";
-                } else {
-                    emptyState.style.display = "none";
-                    
-                    users.forEach(user => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${user.id}</td>
-                            <td>${user.fullName}</td>
-                            <td>${user.username}</td>
-                            <td>${user.email}</td>
-                            <td>${formatPhone(user.phone)}</td>
-                            <td>${formatDocument(user.document)}</td>
-                            <td><span class="badge badge-success">Ativo</span></td>
-                        `;
-                        tableBody.appendChild(row);
-                    });
-                }
-            } catch (error) {
-                showToast("Erro ao carregar usuários", "error");
-                console.error(error);
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // Format helpers
-        function formatPhone(phone) {
-            if (!phone) return "";
-            phone = phone.replace(/\D/g, "");
-            if (phone.length === 11) {
-                return `(${phone.substring(0, 2)}) ${phone.substring(2, 7)}-${phone.substring(7)}`;
-            }
-            return phone;
-        }
-        
-        function formatDocument(doc) {
-            if (!doc) return "";
-            doc = doc.replace(/\D/g, "");
-            if (doc.length === 11) {
-                return `${doc.substring(0, 3)}.${doc.substring(3, 6)}.${doc.substring(6, 9)}-${doc.substring(9)}`;
-            }
-            return doc;
-        }
-
-        // Inicialização
-        window.addEventListener("load", () => {
-            carregarUsuarios();
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/frontend/assets/js/api.js"></script>
+    <script src="/frontend/assets/js/script.js"></script>   
 </body>
 </html>

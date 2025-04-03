@@ -72,4 +72,15 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    @Operation(summary = "Update user", description = "Update a user in the system.")
+    @Parameter(name = "user", description = "User to be updated", required = true)
+    public User update(Long id, User user) {
+        User existingUser = findById(user.getId());
+        existingUser.setFullName(user.getFullName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setUserType(user.getUserType());
+        return userRepository.save(existingUser);
+    }
+
 }
