@@ -27,7 +27,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 /**
  * Representa um usuário do sistema de e-commerce.
  */
@@ -38,6 +37,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = "password")
+@Schema(description = "Representa um usuário do sistema de e-commerce.")
 public class User {
 
     @Id

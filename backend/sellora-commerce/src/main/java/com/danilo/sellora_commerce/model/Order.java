@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Schema(description = "Representa um pedido de compra")
 public class Order {
 
     @Id

@@ -25,6 +25,7 @@ public class UserService {
         List<User> users = userRepository.findAll();
         return users.stream()
                 .map(user -> new UserDTO(
+                        user.getId(),
                         user.getUsername(),
                         user.getEmail(),
                         user.getPhone(),
