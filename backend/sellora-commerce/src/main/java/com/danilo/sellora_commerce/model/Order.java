@@ -3,14 +3,15 @@ package com.danilo.sellora_commerce.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.danilo.sellora_commerce.model.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -27,7 +28,7 @@ public class Order {
     @Schema(description = "ID único do pedido", example = "1001")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @NotNull(message = "User is required")
     @Schema(description = "Usuário que fez o pedido")
@@ -43,10 +44,28 @@ public class Order {
     private OrderStatus status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "order-orderItems")
     @Schema(description = "Itens do pedido")
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Schema(description = "Data e hora do pedido", example = "2025-04-01T10:15:30")
     private LocalDateTime orderDate = LocalDateTime.now();
 
+    /**
+     * Adiciona um item ao pedido e atualiza o total.
+     */
+    public void addItem(OrderItem item) {
+        orderItems.add(item);
+        item.setOrder(this);
+        recalculateTotal();
+    }
+
+    /**
+     * Recalcula o valor total do pedido.
+     */
+    public void recalculateTotal() {
+        this.totalAmount = orderItems.stream()
+            .map(OrderItem::getSubtotal)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

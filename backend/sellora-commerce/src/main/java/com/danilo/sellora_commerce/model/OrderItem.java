@@ -1,8 +1,12 @@
 package com.danilo.sellora_commerce.model;
 
 import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -21,13 +25,15 @@ public class OrderItem {
     @Schema(description = "ID único do item do pedido", example = "101")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference(value = "order-orderItems")
     @Schema(description = "Pedido ao qual este item pertence")
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)
+    @JsonBackReference(value = "product-orderItems")
     @Schema(description = "Produto associado a este item do pedido")
     private Product product;
 
@@ -43,7 +49,7 @@ public class OrderItem {
      * Calcula o subtotal do item do pedido com base no preço do produto e quantidade.
      */
     public void calculateSubtotal() {
-        if (product != null && product.getPrice() != null) {
+        if (product != null && product.getPrice() != null && quantity != null) {
             this.subtotal = product.getPrice().multiply(BigDecimal.valueOf(quantity));
         }
     }
