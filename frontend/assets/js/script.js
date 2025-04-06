@@ -128,3 +128,4 @@ async function fetchCompleteStatistics() {
         console.error('Erro ao buscar estatísticas completas:', error);
     }
 }
+
