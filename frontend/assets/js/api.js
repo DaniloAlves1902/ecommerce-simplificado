@@ -134,7 +134,7 @@ async function saveUser(userData) {
         
         // Adicionando senha padrão para novos usuários (se o backend exigir)
         if (!isEditing) {
-            userData.password = "default_password"; // Adicione isso se o backend exigir uma senha
+            userData.password = "1234"; // Adicione isso se o backend exigir uma senha
         }
         
         const response = await fetch(url, {

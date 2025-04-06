@@ -95,7 +95,7 @@ public class UserController {
         } else {
             logger.warn("User with document {} not found", document);
         }
-        return user;    
+        return user;
     }
 
     @Operation(summary = "Delete user by ID", description = "Delete a user from the system by their ID.")
@@ -112,6 +112,5 @@ public class UserController {
         user.setId(id);
         return userService.update(id, user);
     }
-
 
 }
