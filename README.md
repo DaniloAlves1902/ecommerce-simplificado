@@ -18,7 +18,7 @@ Bem-vindo ao **E-commerce Simplificado**! Este projeto foi desenvolvido para ser
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Frontend**: React
+- **Frontend**: html, css e js puro e posteriormente React
 - **Backend**: Spring Boot
 - **Banco de Dados**: H2 para testes e posteriormente MySQL
 - **Documentação da API**: Swagger
@@ -38,8 +38,7 @@ Navegue até o diretório do backend e execute o comando:
 mvn spring-boot:run
 O backend será iniciado na porta 8080.
 
-Passo 3: Executando o Frontend (React)
-Navegue até o diretório do frontend:
+
 
 cd frontend
 Instale as dependências:
